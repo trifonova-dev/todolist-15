@@ -4,13 +4,6 @@ import { todolistsApi } from "@/features/todolists/api/todolistsApi"
 import type { Todolist } from "@/features/todolists/api/todolistsApi.types"
 import type { RequestStatus } from "@/common/types"
 
-export type DomainTodolist = Todolist & {
-  filter: FilterValues
-  entityStatus: RequestStatus
-}
-
-export type FilterValues = "all" | "active" | "completed"
-
 export const todolistsSlice = createAppSlice({
   name: "todolists",
   initialState: [] as DomainTodolist[],
@@ -124,3 +117,10 @@ export const {
   changeTodolistStatusAC,
 } = todolistsSlice.actions
 export const todolistsReducer = todolistsSlice.reducer
+
+export type DomainTodolist = Todolist & {
+  filter: FilterValues
+  entityStatus: RequestStatus
+}
+
+export type FilterValues = "all" | "active" | "completed"
