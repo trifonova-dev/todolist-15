@@ -1,4 +1,4 @@
-import { setAppErrorAC, setAppStatusAC } from "@/app/app-slice"
+import { setAppStatusAC } from "@/app/app-slice"
 import type { RootState } from "@/app/store"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { tasksApi } from "@/features/todolists/api/tasksApi"
@@ -72,6 +72,7 @@ export const tasksSlice = createAppSlice({
           return payload
         } catch (error) {
           dispatch(setAppStatusAC({ status: "failed" }))
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -116,17 +117,11 @@ export const tasksSlice = createAppSlice({
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { task: res.data.data.item }
           } else {
-            if (res.data.messages.length) {
-              dispatch(setAppErrorAC({ error: res.data.messages[0] }))
-            } else {
-              dispatch(setAppErrorAC({ error: "Something went wrong" }))
-            }
-            dispatch(setAppStatusAC({ status: "failed" }))
+            handleServerAppError(res.data, dispatch)
             return rejectWithValue(null)
           }
         } catch (error: any) {
-          dispatch(setAppErrorAC({ error: error.message }))
-          dispatch(setAppStatusAC({ status: "failed" }))
+          handleServerNetworkError(error, dispatch)
           return rejectWithValue(null)
         }
       },
