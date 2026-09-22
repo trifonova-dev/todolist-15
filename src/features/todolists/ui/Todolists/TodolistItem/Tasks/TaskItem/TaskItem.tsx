@@ -9,13 +9,15 @@ import IconButton from "@mui/material/IconButton"
 import ListItem from "@mui/material/ListItem"
 import type { ChangeEvent } from "react"
 import { getListItemSx } from "./TaskItem.styles"
+import type { DomainTodolist } from "@/features/todolists/model/todolists-slice"
 
 type Props = {
   task: DomainTask
   todolistId: string
+  todolist: DomainTodolist
 }
 
-export const TaskItem = ({ task, todolistId }: Props) => {
+export const TaskItem = ({ task, todolistId, todolist }: Props) => {
   const dispatch = useAppDispatch()
 
   const deleteTask = () => {
@@ -42,7 +44,11 @@ export const TaskItem = ({ task, todolistId }: Props) => {
   return (
     <ListItem sx={getListItemSx(isTaskCompleted)}>
       <div>
-        <Checkbox checked={isTaskCompleted} onChange={changeTaskStatus} />
+        <Checkbox
+          disabled={todolist.entityStatus === "loading"}
+          checked={isTaskCompleted}
+          onChange={changeTaskStatus}
+        />
         <EditableSpan value={task.title} onChange={changeTaskTitle} />
       </div>
       <IconButton onClick={deleteTask}>
