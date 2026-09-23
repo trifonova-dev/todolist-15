@@ -11,7 +11,9 @@ export const EditableSpan = ({ value, onChange }: Props) => {
   const [isEditMode, setIsEditMode] = useState(false)
 
   const turnOnEditMode = () => {
-    setIsEditMode(true)
+    if (!isEditMode) {
+      setIsEditMode(true)
+    }
   }
 
   const turnOffEditMode = () => {
